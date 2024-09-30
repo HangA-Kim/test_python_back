@@ -31,8 +31,8 @@ app.post("/chat", (req, res) => {
     // res.send("Typescript + Node.js + Express Server");
     const reqQuestion = req.body.question;
     const pythonExePath = isDevelopment()
-        ? path_1.default.join(__dirname, "chat", "Scripts", "python.exe")
-        : path_1.default.join(__dirname, "chat", "bin", "python3");
+        ? path_1.default.join(__dirname, "venv", "Scripts", "python.exe")
+        : path_1.default.join(__dirname, "venv", "bin", "python3");
     // const pythonExePath = path.join(__dirname, "chat", "bin", "python3");
     const dataPath = path_1.default.join(__dirname, "chat", "data");
     const net = (0, child_process_1.spawn)(pythonExePath, ["chat/bizchat.py", reqQuestion, dataPath]);
