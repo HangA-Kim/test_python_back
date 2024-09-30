@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_teddynote.messages import stream_response
 
-load_dotenv()
+load_dotenv('../.env')
 os.getenv("OPENAI_API_KEY")
 
 # 경로 추적을 위한 설정
