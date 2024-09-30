@@ -5,6 +5,13 @@ import path from "path";
 
 // console.log(path.join(__dirname)); // 루트 경로. 배포때와 개발때의 경로가 달라서
 
+const isDevelopment = (): boolean => {
+  // console.log("NODE_ENV>", process.env.NODE_ENV);
+  // npm install cross-env --save-dev
+  // "dev": "cross-env NODE_ENV=development nodemon --exec ts-node ./index.ts"
+  return process.env.NODE_ENV === "development";
+};
+
 const app: Express = express();
 const port = 8080;
 // const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
@@ -15,13 +22,20 @@ const port = 8080;
 // app.use(cors());
 app.use(express.json());
 // app.use(bodyParser.json())
+
+app.get("/", (request, response) => {
+  response.send("hello World http test");
+});
+
 app.post("/chat", (req: Request, res: Response) => {
   // res.send("Typescript + Node.js + Express Server");
 
   const reqQuestion = req.body.question;
-  // window
-  const pythonExePath = path.join(__dirname, "chat", "Scripts", "python.exe");
-  // linux
+
+  const pythonExePath = isDevelopment()
+    ? path.join(__dirname, "chat", "Scripts", "python.exe")
+    : path.join(__dirname, "chat", "bin", "python3");
+
   // const pythonExePath = path.join(__dirname, "chat", "bin", "python3");
   const dataPath = path.join(__dirname, "chat", "data");
 
