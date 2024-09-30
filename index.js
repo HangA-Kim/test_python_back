@@ -4,26 +4,55 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
+// import cors from "cors";
 const child_process_1 = require("child_process");
-const app = (0, express_1.default)();
-const port = 8081;
-const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
-const options = {
-    origin: allowedOrigins,
+const path_1 = __importDefault(require("path"));
+// console.log(path.join(__dirname)); // 루트 경로. 배포때와 개발때의 경로가 달라서
+const isDevelopment = () => {
+    // console.log("NODE_ENV>", process.env.NODE_ENV);
+    // npm install cross-env --save-dev
+    // "dev": "cross-env NODE_ENV=development nodemon --exec ts-node ./index.ts"
+    return process.env.NODE_ENV === "development";
 };
-app.use((0, cors_1.default)(options));
+const app = (0, express_1.default)();
+const port = 8080;
+// const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
+// const options: cors.CorsOptions = {
+//   origin: allowedOrigins,
+// };
+// app.use(cors(options));
 // app.use(cors());
 app.use(express_1.default.json());
-let output = "";
-app.get("/chat", (req, res) => {
+// app.use(bodyParser.json())
+app.get("/", (request, response) => {
+    response.send("hello World http test");
+});
+app.post("/chat", (req, res) => {
     // res.send("Typescript + Node.js + Express Server");
-    const net = (0, child_process_1.spawn)("python", ["script.py"]);
-    output = "";
+    const reqQuestion = req.body.question;
+    const pythonExePath = isDevelopment()
+        ? path_1.default.join(__dirname, "chat", "Scripts", "python.exe")
+        : path_1.default.join(__dirname, "chat", "bin", "python3");
+    // const pythonExePath = path.join(__dirname, "chat", "bin", "python3");
+    const dataPath = path_1.default.join(__dirname, "chat", "data");
+    const net = (0, child_process_1.spawn)(pythonExePath, ["chat/bizchat.py", reqQuestion, dataPath]);
+    let output = "";
     //파이썬 파일 수행 결과를 받아온다
     net.stdout.on("data", function (data) {
         output += data.toString();
-        res.send(output);
+        // res.send(data.toString());
+    });
+    net.on("close", (code) => {
+        if (code === 0) {
+            // res.send(output);
+            res.status(200).json({ answer: output });
+        }
+        else {
+            res.status(500).send("Something went wrong");
+        }
+    });
+    net.stderr.on("data", (data) => {
+        console.error(`stderr: ${data}`);
     });
 });
 app

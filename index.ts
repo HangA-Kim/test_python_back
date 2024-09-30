@@ -13,7 +13,7 @@ const isDevelopment = (): boolean => {
 };
 
 const app: Express = express();
-const port = 8081;
+const port = 8080;
 // const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
 // const options: cors.CorsOptions = {
 //   origin: allowedOrigins,
