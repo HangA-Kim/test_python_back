@@ -33,15 +33,14 @@ app.post("/chat", (req: Request, res: Response) => {
   const reqQuestion = req.body.question;
 
   const pythonExePath = isDevelopment()
-    ? path.join(__dirname, "venv", "Scripts", "python.exe")
-    : path.join(__dirname, "venv", "bin", "python3");
+    ? path.join(__dirname, "chat", "Scripts", "python.exe")
+    : path.join(__dirname, "chat", "bin", "python3");
 
   // const pythonExePath = path.join(__dirname, "chat", "bin", "python3");
   const defaultSrcPath = path.join(__dirname, "chat");
-  const dataPath = path.join(defaultSrcPath, "data");
 
   const net = spawn(pythonExePath, [
-    path.join(__dirname, "chat", "bizchat.py"),
+    path.join(defaultSrcPath, "bizchat.py"),
     reqQuestion,
     path.join(defaultSrcPath, "data"),
   ]);
