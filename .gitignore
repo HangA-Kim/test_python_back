@@ -1,6 +1,6 @@
 .env
 .env*.local
 node_modules
-chat
-!chat/data
+chat/*
+!chat/data/
 !chat/bizchat.py
