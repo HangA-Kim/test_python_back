@@ -37,9 +37,14 @@ app.post("/chat", (req: Request, res: Response) => {
     : path.join(__dirname, "venv", "bin", "python3");
 
   // const pythonExePath = path.join(__dirname, "chat", "bin", "python3");
-  const dataPath = path.join(__dirname, "chat", "data");
+  const defaultSrcPath = path.join(__dirname, "chat");
+  const dataPath = path.join(defaultSrcPath, "data");
 
-  const net = spawn(pythonExePath, ["chat/bizchat.py", reqQuestion, dataPath]);
+  const net = spawn(pythonExePath, [
+    path.join(__dirname, "chat", "bizchat.py"),
+    reqQuestion,
+    path.join(defaultSrcPath, "data"),
+  ]);
 
   let output = "";
   //파이썬 파일 수행 결과를 받아온다
