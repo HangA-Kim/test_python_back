@@ -4,3 +4,4 @@ node_modules
 chat/*
 !chat/data/
 !chat/bizchat.py
+test/*
